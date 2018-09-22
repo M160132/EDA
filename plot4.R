@@ -19,29 +19,30 @@ filtered$Sub_metering_1 = as.numeric(filtered$Sub_metering_1)
 filtered$Sub_metering_2 = as.numeric(filtered$Sub_metering_2)
 filtered$Sub_metering_3 = as.numeric(filtered$Sub_metering_3)
 
+filtered$Date <- as.Date(filtered$Date,"%d/%m/%Y")
+filtered <-mutate(filtered, DateNtime = as.POSIXct(paste(filtered$Date, filtered$Time)))
+
 par(mfrow=c(2,2))
 
 ## This is plot (1,1)
-plot(filtered$Global_active_power, type = "l", xlab = "Number of Minutes from the first Minute of Thursday",
+plot(filtered$Global_active_power ~ filtered$DateNtime, type = "l", xlab="",
      ylab = "Global Active Power (Kilowatts)")
 
 ## This is plot (1,2)
-plot(filtered$Voltage, type = "l", xlab = "Number of Minutes from the first Minute of Thursday",
-     ylab = "Voltage")
+plot(filtered$Voltage ~ filtered$DateNtime, type = "l", xlab="", ylab = "Voltage")
 
 ## This is plot (2,1)
-with(filtered, plot(Sub_metering_1, type="n",xlab = "Number of Minutes from the first Minute of Thursday", ylab = "Energy sub metering"), 
-     plot(Sub_metering_2, type="n"), plot(Sub_metering_3, type="n"))
-with(filtered, lines(Sub_metering_1))
-with(filtered, lines(Sub_metering_2, col="red"))
-with(filtered, lines(Sub_metering_3, col="blue"))
+with(filtered, plot(Sub_metering_1 ~ DateNtime, type="n",xlab = "", ylab = "Energy sub metering"), 
+     plot(Sub_metering_2 ~ DateNtime, type="n"), plot(Sub_metering_3 ~ DateNtime, type="n"))
+with(filtered, lines(Sub_metering_1 ~ DateNtime))
+with(filtered, lines(Sub_metering_2 ~ DateNtime, col="red"))
+with(filtered, lines(Sub_metering_3 ~ DateNtime, col="blue"))
 
-legend("topright", col =c("black","red","blue"), box.lty = 0,
+legend("topright", col =c("black","red","blue"), 
        legend = c("Sub_metering_1","Sub_metering_2","Sub_metering_3"), lty = 1, cex = 0.7)
 
 ## This is plot(2,2)
-plot(filtered$Global_reactive_power, type = "l", 
-     xlab = "Number of Minutes from the first Minute of Thursday", 
+plot(filtered$Global_reactive_power ~ filtered$DateNtime, type = "l", xlab = "", 
      ylab = "Global_reactive_power")
 
 dev.copy(png, "plot4.png")

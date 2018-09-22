@@ -8,6 +8,7 @@ cleaned = raw[-1,]
 subset1 = subset(cleaned, cleaned$Date == "1/2/2007")
 subset2 = subset(cleaned, cleaned$Date == "2/2/2007")
 #Above: read the data, change the column header to the descriptive header and remove the first row
+par(mfrow = c(1,1))
 
 filtered = rbind(subset1,subset2)
 filtered$Global_active_power = as.numeric(filtered$Global_active_power)
